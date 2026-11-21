@@ -16,7 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: NotesViewModel = viewModel()
+    viewModel: NotesViewModel
 ) {
     Column(
         modifier = modifier.fillMaxSize().padding(16.dp)
@@ -26,16 +26,26 @@ fun MainScreen(
         Spacer(Modifier.height(8.dp))
 
         SearchAndSortBarView(
-            searchQuery = "",
-            onSearchChanged = {},
-            sortBy = "Date",
-            onSortByChanged = {},
-            ascending = false
-        ) { }
+            searchQuery = viewModel.searchQuery,
+            onSearchChanged = { viewModel.searchQuery = it },
+            sortBy = viewModel.sortBy,
+            onSortByChanged = { viewModel.sortBy = it },
+            ascending = viewModel.ascending,
+            onOrderChanged = { viewModel.ascending = it }
+        )
 
         Spacer(Modifier.height(12.dp))
 
-        AddOrEditNoteCardView()
+        AddOrEditNoteCardView(
+            title = viewModel.title,
+            note = viewModel.note,
+            isEditing = viewModel.editingNoteId != null,
+            onTitleChanged = { viewModel.title = it },
+            onNoteChanged = { viewModel.note = it },
+            onSubmit = {
+                if (viewModel.editingNoteId == null) { viewModel.addNote() } else viewModel.updateNote()
+            }
+        )
 
         HorizontalDivider(Modifier.padding(vertical = 12.dp))
 

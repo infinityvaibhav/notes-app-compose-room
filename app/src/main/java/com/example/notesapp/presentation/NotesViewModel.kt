@@ -3,9 +3,10 @@ package com.example.notesapp.presentation
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
 import com.example.notesapp.data.Note
 
-class NotesViewModel {
+class NotesViewModel: ViewModel() {
     var notes by mutableStateOf(Note.mockNotes)
 
     var title by mutableStateOf("")
