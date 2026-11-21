@@ -11,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun MainScreen(
@@ -49,7 +48,14 @@ fun MainScreen(
 
         HorizontalDivider(Modifier.padding(vertical = 12.dp))
 
-        NotesListOrEmptyView()
+        NotesListContentView(
+            notes = viewModel.filteredAndSortedNotes,
+            onNoteClick = { viewModel.editNote(it) },
+            onDeleteNote = {
+                viewModel.deleteNote(it)
+                viewModel.clearInputs()
+            }
+        )
     }
 }
 
