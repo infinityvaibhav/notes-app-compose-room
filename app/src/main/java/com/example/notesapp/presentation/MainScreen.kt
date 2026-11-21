@@ -25,7 +25,13 @@ fun MainScreen(
 
         Spacer(Modifier.height(8.dp))
 
-        SearchAndSortBarView()
+        SearchAndSortBarView(
+            searchQuery = "",
+            onSearchChanged = {},
+            sortBy = "Date",
+            onSortByChanged = {},
+            ascending = false
+        ) { }
 
         Spacer(Modifier.height(12.dp))
 
