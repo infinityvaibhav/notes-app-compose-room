@@ -54,7 +54,8 @@ fun MainScreen(
             onDeleteNote = {
                 viewModel.deleteNote(it)
                 viewModel.clearInputs()
-            }
+            },
+            modifier = Modifier.weight(1f)
         )
     }
 }

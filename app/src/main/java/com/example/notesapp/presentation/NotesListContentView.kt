@@ -14,23 +14,33 @@ import com.example.notesapp.data.Note
 fun NotesListContentView(
     notes: List<Note>,
     onNoteClick: (Note) -> Unit,
-    onDeleteNote: (Note) -> Unit
+    onDeleteNote: (Note) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     if (notes.isEmpty()) {
-        EmptyNotesView()
+        EmptyNotesView(modifier = modifier)
     } else {
         NotesListView(
             notes = notes,
             onNoteClick = onNoteClick,
-            onDeleteNote = onDeleteNote
+            onDeleteNote = onDeleteNote,
+            modifier = modifier
         )
     }
 }
 
 @Composable
-fun NotesListView(notes: List<Note>, onNoteClick: (Note) -> Unit, onDeleteNote: (Note) -> Unit) {
-    LazyColumn(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        items(notes, key = { it.id}) { note ->
+fun NotesListView(
+    notes: List<Note>,
+    onNoteClick: (Note) -> Unit,
+    onDeleteNote: (Note) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(notes, key = { it.id }) { note ->
             NotesRowView(note, onNoteClick, onDeleteNote)
         }
     }

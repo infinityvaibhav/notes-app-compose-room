@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.notesapp.data.Note
+import java.time.LocalDateTime
 
 class NotesViewModel: ViewModel() {
     var notes by mutableStateOf(Note.mockNotes)
@@ -18,27 +19,63 @@ class NotesViewModel: ViewModel() {
 
     // CRUD
     fun addNote() {
+        if (note.isBlank()) return
 
+        val newNote = Note(
+            title = title,
+            note = note
+        )
+
+        notes += newNote
+        clearInputs()
     }
 
     fun updateNote() {
+        if (editingNoteId == null) return
 
+        notes = notes.map { note ->
+            if (note.id == editingNoteId) {
+                note.copy(
+                    title = title,
+                    note = this.note,
+                    updatedAt = LocalDateTime.now()
+                )
+            } else {
+                note
+            }
+        }
+
+        editingNoteId = null
+        clearInputs()
     }
 
     fun deleteNote(note: Note) {
-
+        notes = notes.filter { it.id != note.id }
+        if (editingNoteId == note.id) {
+            clearInputs()
+        }
     }
 
     fun editNote(note: Note) {
-
+        editingNoteId = note.id
+        title = note.title
+        this.note = note.note
     }
 
     fun clearInputs() {
         title = ""
         note = ""
+        editingNoteId = null
     }
 
     // Filtering and sorting notes
     val filteredAndSortedNotes: List<Note>
         get() = notes
+            .filter { it.title.contains(searchQuery, ignoreCase = true) || it.note.contains(searchQuery, ignoreCase = true)}
+            .sortedWith(
+                comparator = when(sortBy) {
+                    "Title" -> compareBy<Note> { it.title.lowercase() }
+                    else -> compareBy { it.createdAt }
+                }.let { if (ascending) it else it.reversed() }
+            )
 }

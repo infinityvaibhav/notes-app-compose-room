@@ -3,6 +3,7 @@ package com.example.notesapp.presentation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.NoteAdd
@@ -19,11 +20,15 @@ import androidx.compose.ui.unit.dp
 import com.example.notesapp.R
 
 @Composable
-fun EmptyNotesView() {
-    Box {
+fun EmptyNotesView(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally) {
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Icon(
                 modifier = Modifier.size(64.dp),
                 imageVector = Icons.AutoMirrored.Filled.NoteAdd,
