@@ -20,8 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.notesapp.R
 
 @Composable
 fun SearchAndSortBarView(
@@ -36,10 +38,10 @@ fun SearchAndSortBarView(
         OutlinedTextField(
             value = searchQuery,
             onValueChange = onSearchChanged,
-            label = { Text("Search Notes")},
+            label = { Text(stringResource(R.string.search_notes)) },
             singleLine = true,
             leadingIcon = {
-                Icon(Icons.Default.Search, contentDescription = "Search Icon")
+                Icon(Icons.Default.Search, contentDescription = stringResource(R.string.cd_search_icon))
             },
             modifier = Modifier.fillMaxWidth()
         )
@@ -54,21 +56,21 @@ fun SearchAndSortBarView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Sort by", color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.sort_by), color = MaterialTheme.colorScheme.onSurfaceVariant)
                 AssistChip(
                     onClick = { onSortByChanged(if (sortBy == "Date") "Title" else "Date") },
-                    label = { Text(sortBy) },
-                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = "sort by icon")}
+                    label = { Text(if (sortBy == "Date") stringResource(R.string.sort_by_date) else stringResource(R.string.sort_by_title)) },
+                    leadingIcon = { Icon(Icons.AutoMirrored.Filled.Sort, contentDescription = stringResource(R.string.cd_sort_by_icon)) }
                 )
             }
 
             AssistChip(
                 onClick = { onOrderChanged(!ascending) },
-                label = { Text(if (ascending) "Ascending" else "Descending") },
+                label = { Text(if (ascending) stringResource(R.string.ascending) else stringResource(R.string.descending)) },
                 leadingIcon = {
                     Icon(
                         imageVector = if (ascending) Icons.Default.ArrowUpward else Icons.Default.ArrowDownward,
-                        contentDescription = "sort by icon"
+                        contentDescription = stringResource(R.string.cd_sort_by_icon)
                     )
                 }
             )

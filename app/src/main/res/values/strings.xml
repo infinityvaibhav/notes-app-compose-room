@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">NotesApp</string>
+
+    <!-- Headers & General -->
+    <string name="notes">Notes</string>
+    <string name="title">Title</string>
+    <string name="note">Note</string>
+    <string name="save_changes">Save changes</string>
+    <string name="add">Add</string>
+
+    <!-- Empty State -->
+    <string name="empty_notes_message">No Notes yet\n Add the new notes using the form above.</string>
+
+    <!-- Search & Sort -->
+    <string name="search_notes">Search Notes</string>
+    <string name="sort_by">Sort by</string>
+    <string name="sort_by_date">Date</string>
+    <string name="sort_by_title">Title</string>
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+
+    <!-- Note Row -->
+    <string name="created_at_format">Created: %1$s</string>
+
+    <!-- Content Descriptions -->
+    <string name="cd_add_notes_icon">Add notes icon</string>
+    <string name="cd_collapse">Collapse</string>
+    <string name="cd_expand">Expand</string>
+    <string name="cd_delete_note">Delete note</string>
+    <string name="cd_search_icon">Search Icon</string>
+    <string name="cd_sort_by_icon">sort by icon</string>
 </resources>

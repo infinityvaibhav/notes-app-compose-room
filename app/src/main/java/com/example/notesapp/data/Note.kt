@@ -1,9 +1,11 @@
 package com.example.notesapp.data
 
 import java.time.LocalDateTime
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
-data class Note(
-    val id: Int,
+data class Note @OptIn(ExperimentalUuidApi::class) constructor(
+    val id: Int = Uuid.random().hashCode(),
     val title: String,
     val note: String,
     val createdAt: LocalDateTime = LocalDateTime.now(),

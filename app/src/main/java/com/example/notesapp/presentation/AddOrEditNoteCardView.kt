@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -13,14 +12,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.notesapp.R
 
 @Composable
 fun AddOrEditNoteCardView(
     title: String,
     note: String,
-    isEditing:  Boolean,
+    isEditing: Boolean,
     onTitleChanged: (String) -> Unit,
     onNoteChanged: (String) -> Unit,
     onSubmit: () -> Unit
@@ -37,7 +38,7 @@ fun AddOrEditNoteCardView(
             OutlinedTextField(
                 value = title,
                 onValueChange = onTitleChanged,
-                label = { Text("Title") },
+                label = { Text(stringResource(R.string.title)) },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -47,7 +48,7 @@ fun AddOrEditNoteCardView(
             OutlinedTextField(
                 value = note,
                 onValueChange = onNoteChanged,
-                label = { Text("Note") },
+                label = { Text(stringResource(R.string.note)) },
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -57,7 +58,7 @@ fun AddOrEditNoteCardView(
                 onClick = onSubmit,
                 modifier = Modifier.align(Alignment.End)
             ) {
-                Text(if (isEditing) "Save changes" else "Add")
+                Text(if (isEditing) stringResource(R.string.save_changes) else stringResource(R.string.add))
             }
         }
     }
