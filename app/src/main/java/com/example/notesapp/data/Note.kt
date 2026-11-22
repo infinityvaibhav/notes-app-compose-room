@@ -1,11 +1,18 @@
 package com.example.notesapp.data
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import androidx.room.TypeConverter
+import androidx.room.TypeConverters
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
+@Entity(tableName = "Note")
+@TypeConverters(Converters::class)
 data class Note @OptIn(ExperimentalUuidApi::class) constructor(
-    val id: Int = Uuid.random().hashCode(),
+    @PrimaryKey val id: Int = Uuid.random().hashCode(),
     val title: String,
     val note: String,
     val createdAt: LocalDateTime = LocalDateTime.now(),
@@ -42,5 +49,21 @@ data class Note @OptIn(ExperimentalUuidApi::class) constructor(
                 note = "1. Clean Code\n2. Pragmatic Programmer\n3. Refactoring"
             )
         )
+    }
+}
+
+object Converters {
+    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+
+    @TypeConverter
+    @JvmStatic
+    fun fromLocalDateTime(value: LocalDateTime?): String? {
+        return value?.format(formatter)
+    }
+
+    @TypeConverter
+    @JvmStatic
+    fun toLocalDateTime(value: String?): LocalDateTime? {
+        return value?.let { LocalDateTime.parse(it, formatter) }
     }
 }

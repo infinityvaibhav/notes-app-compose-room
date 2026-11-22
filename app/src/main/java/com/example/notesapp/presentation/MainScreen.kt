@@ -9,14 +9,27 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.notesapp.data.AppDatabase
 
 @Composable
-fun MainScreen(
-    modifier: Modifier = Modifier,
-    viewModel: NotesViewModel
-) {
+fun MainScreen(modifier: Modifier = Modifier) {
+
+    val context = LocalContext.current
+    val database = remember { AppDatabase.getDatabase(context = context) }
+    val viewModel: NotesViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                @Suppress("UNCHECKED_CAST")
+                return NotesViewModel(database.noteDao()) as T
+            }
+        }
+    )
+
     Column(
         modifier = modifier.fillMaxSize().padding(16.dp)
     ) {
@@ -60,9 +73,9 @@ fun MainScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    val viewModel = remember { NotesViewModel() }
-    MainScreen(viewModel = viewModel)
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun MainScreenPreview() {
+//    val viewModel = remember { NotesViewModel() }
+//    MainScreen(viewModel = viewModel)
+//}

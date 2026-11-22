@@ -4,11 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.notesapp.data.Note
+import com.example.notesapp.data.NoteDao
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 
-class NotesViewModel: ViewModel() {
-    var notes by mutableStateOf(Note.mockNotes)
+class NotesViewModel(
+    private val noteDao: NoteDao
+): ViewModel() {
+    var notes by mutableStateOf(listOf<Note>())
+        private set
 
     var title by mutableStateOf("")
     var note by mutableStateOf("")
@@ -16,6 +22,19 @@ class NotesViewModel: ViewModel() {
     var sortBy by mutableStateOf("Date") //Sort by date or title
     var searchQuery by mutableStateOf("")
     var ascending by mutableStateOf(true)
+
+    init {
+        loadNotes()
+    }
+
+    private fun loadNotes() {
+        viewModelScope.launch {
+            notes = when(sortBy) {
+                    "Title" -> if (ascending) noteDao.getAllNotesByTitleAsc() else noteDao.getAllNotesByTitleDesc()
+                    else -> if (ascending) noteDao.getAllNotesByDateAsc() else noteDao.getAllNotesByDateDesc()
+            }
+        }
+    }
 
     // CRUD
     fun addNote() {
@@ -26,23 +45,26 @@ class NotesViewModel: ViewModel() {
             note = note
         )
 
-        notes += newNote
+        // insert in room database
+        viewModelScope.launch {
+            noteDao.insert(newNote)
+            loadNotes()
+        }
         clearInputs()
     }
 
     fun updateNote() {
         if (editingNoteId == null) return
 
-        notes = notes.map { note ->
-            if (note.id == editingNoteId) {
-                note.copy(
-                    title = title,
-                    note = this.note,
-                    updatedAt = LocalDateTime.now()
-                )
-            } else {
-                note
-            }
+        val updatedNotes = notes.find { it.id == editingNoteId }?.copy(
+            title = title,
+            note = this.note,
+            updatedAt = LocalDateTime.now()
+        ) ?: return
+
+        viewModelScope.launch {
+            noteDao.update(updatedNotes)
+            loadNotes()
         }
 
         editingNoteId = null
@@ -50,9 +72,9 @@ class NotesViewModel: ViewModel() {
     }
 
     fun deleteNote(note: Note) {
-        notes = notes.filter { it.id != note.id }
-        if (editingNoteId == note.id) {
-            clearInputs()
+        viewModelScope.launch {
+            noteDao.delete(note)
+            loadNotes()
         }
     }
 
